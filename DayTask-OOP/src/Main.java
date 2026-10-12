@@ -8,6 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+
 
 // ABSTRACTION + ENCAPSULATION: common task data is private, accessed by getters/setters
 abstract class TaskEntry {
@@ -171,6 +177,21 @@ public class Main {
 
         JFrame frame = new JFrame("DAYTASK");
 
+        frame.setSize(760, 520);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setBackground(new Color(238, 240, 250));
+
+        JLabel header = new JLabel("  DAYTASK  |  Task Manager");
+        header.setFont(new Font("SansSerif", Font.BOLD, 24));
+        header.setForeground(Color.WHITE);
+        header.setOpaque(true);
+        header.setBackground(new Color(35, 45, 60));
+        header.setBorder(
+                BorderFactory.createEmptyBorder(22, 15, 22, 15)
+        );
+
+
         JLabel titleLbl = new JLabel("Title:");
         JLabel dateLbl = new JLabel("Date (YYYY-MM-DD):");
         JLabel priorityLbl = new JLabel("Priority (High/Moderate/Low):");
@@ -186,6 +207,58 @@ public class Main {
         JButton doneBtn = new JButton("MARK COMPLETED");
         JButton deleteBtn = new JButton("DELETE TASK");
         JButton progressBtn = new JButton("PROGRESS REPORT");
+
+        Color accent = new Color(46, 125, 90);
+        Color textColor = new Color(35, 45, 60);
+
+        JLabel[] labels = {
+                titleLbl, dateLbl, priorityLbl, deadlineLbl
+        };
+
+        for (JLabel label : labels) {
+            label.setFont(new Font("SansSerif", Font.BOLD, 13));
+            label.setForeground(textColor);
+        }
+
+        JTextField[] fields = {
+                titleIn, dateIn, priorityIn, deadlineIn
+        };
+
+        for (JTextField field : fields) {
+            field.setFont(new Font("SansSerif", Font.PLAIN, 14));
+            field.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(210, 215, 225)),
+                    BorderFactory.createEmptyBorder(8, 10, 8, 10)
+            ));
+        }
+
+
+        JButton[] buttons = {
+                addBtn, viewBtn, doneBtn, deleteBtn, progressBtn
+        };
+
+        Color[] buttonColors = {
+                new Color(151, 227, 195),   // Green: Add task
+                new Color(124, 170, 232),  // Blue: View tasks
+                new Color(10, 244, 248),  // Teal: Mark completed
+                new Color(253, 5, 5),   // Red: Delete task
+                new Color(170, 134, 234)   // Purple: Progress report
+        };
+
+        for (int i = 0; i < buttons.length; i++) {
+            JButton button = buttons[i];
+
+            button.setFont(new Font("SansSerif", Font.BOLD, 12));
+            button.setFocusPainted(false);
+            button.setBackground(buttonColors[i]);
+            button.setForeground(Color.WHITE);
+            button.setOpaque(true);
+            button.setBorderPainted(false);
+            button.setCursor(
+                    new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)
+            );
+        }
+
 
         // ADD TASK
         addBtn.addActionListener(new ActionListener() {
@@ -265,30 +338,39 @@ public class Main {
             }
         });
 
-        // LAYOUT rows, column, spacing rows, spacing column
-        frame.setLayout(new GridLayout(9, 2, 6, 6));
-        frame.add(titleLbl);
-        frame.add(titleIn);
 
-        frame.add(dateLbl);
-        frame.add(dateIn);
+        JPanel formPanel = new JPanel(new GridLayout(7, 2, 12, 12));
+        formPanel.setBackground(new Color(238, 240, 250));
+        formPanel.setBorder(
+                BorderFactory.createEmptyBorder(25, 30, 25, 30)
+        );
 
-        frame.add(priorityLbl);
-        frame.add(priorityIn);
+        formPanel.add(titleLbl);
+        formPanel.add(titleIn);
 
-        frame.add(deadlineLbl);
-        frame.add(deadlineIn);
+        formPanel.add(dateLbl);
+        formPanel.add(dateIn);
 
-        frame.add(addBtn);
-        frame.add(viewBtn);
+        formPanel.add(priorityLbl);
+        formPanel.add(priorityIn);
 
-        frame.add(doneBtn);
-        frame.add(deleteBtn);
+        formPanel.add(deadlineLbl);
+        formPanel.add(deadlineIn);
 
-        frame.add(progressBtn);
+        formPanel.add(addBtn);
+        formPanel.add(viewBtn);
 
-        frame.setSize(500, 400);
+        formPanel.add(doneBtn);
+        formPanel.add(deleteBtn);
+
+        formPanel.add(progressBtn);
+        formPanel.add(new JLabel(""));
+
+        frame.setLayout(new BorderLayout());
+        frame.add(header, BorderLayout.NORTH);
+        frame.add(formPanel, BorderLayout.CENTER);
+
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
 }
